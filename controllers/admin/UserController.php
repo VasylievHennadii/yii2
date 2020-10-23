@@ -2,13 +2,14 @@
 
 namespace app\controllers\admin;
 
-use yii\web\Controller;
+use app\controllers\AppController;
 
-class UserController extends Controller {
+
+class UserController extends AppController {
 
     public function actionIndex(){
 
-        // для ссылки вида http://yii2/web/index.php?r=admin/user/index
+        // для ссылки вида yii2/web/index.php?r=admin/user/index
 
         return $this->render('index');
     }

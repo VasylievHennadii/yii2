@@ -3,15 +3,11 @@
 
 namespace app\controllers;
 
-use yii\web\Controller;
-
-
-
-class MyController extends Controller {
+class MyController extends AppController {
 
     public function actionIndex($id = null){
 
-        // для ссылки вида http://yii2/web/index.php?r=my/index
+        // для ссылки вида yii2/web/index.php?r=my/index
 
         $hi = 'Hello, World! Передаем переменную $hi из MyController.';
         $names = ['Ivanov', 'Petrov', 'Sidorov'];
@@ -20,6 +16,11 @@ class MyController extends Controller {
         // return $this->render('index', ['hello' => $hi, 'arrnames' => $names]); // другой способ записи
         return $this->render('index', compact('hi', 'names', 'id'));
 
+    }
+
+    public function actionBlogPost(){
+        //  для ссылки вида my/blog-post
+        return 'Blog Post';
     }
 
 }
