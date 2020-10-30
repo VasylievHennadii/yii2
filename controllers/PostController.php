@@ -26,15 +26,20 @@ class PostController extends AppController {
         }
 
         $model = new TestForm();
+        // $model->name = 'Автор';
+        // $model->email = 'mail@mail.com';
+        // $model->text = 'Текст моего сообщения';
+        // $model->save();
+
+
         if($model->load(Yii::$app->request->post())){            
-            if($model->validate()){
+            if($model->save()){
                 Yii::$app->session->setFlash('success', 'Данные приняты');
                 return $this->refresh();
             }else{
                 Yii::$app->session->setFlash('error', 'Ошибка');
             }
-        }
-        
+        }        
 
         $this->view->title = 'Все статьи';
         return $this->render('test', compact('model'));
