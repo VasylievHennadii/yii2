@@ -25,12 +25,27 @@ class PostController extends AppController {
             return 'test';
         }
 
+        //удаление данных из БД строки с id=6
+        // $post = TestForm::findOne(6);
+        // $post->delete();
+
+
+        //удаление записей где id>4
+        // TestForm::deleteAll(['>', 'id', 4]);
+
+
+        //метод save() используем для обновления данных в БД
+        // $post = TestForm::findOne(2);
+        // $post->email = '222@2.com';   // меняем email в таблице post (взятой из TestForm) строка с id=2
+        // $post->save();
+
+
+        //метод save() используем для записи новых данных в БД, когда создаем $model = new TestForm();
         $model = new TestForm();
         // $model->name = 'Автор';
         // $model->email = 'mail@mail.com';
         // $model->text = 'Текст моего сообщения';
-        // $model->save();
-
+        // $model->save();        
 
         if($model->load(Yii::$app->request->post())){            
             if($model->save()){
