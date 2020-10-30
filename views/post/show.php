@@ -2,6 +2,9 @@
     //$this->title = 'Одна статья';
     //$this->registerMetaTag(['name' => 'keywords', 'content' => 'ключевики....']);
     //$this->registerMetaTag(['name' => 'description', 'content' => 'описание страницы....']);
+
+use app\components\MyWidget;
+
 ?>
 
 <?php $this->beginBlock('block1'); ?>
@@ -9,6 +12,14 @@
 <?php $this->endBlock(); ?>
 
 <h1>Show Action</h1>
+
+<?php //echo MyWidget::widget(['name' => 'Вася']); ?>
+
+<?php MyWidget::begin(); ?>
+    <h1>привет мир!!! нижний регистр</h1>
+<?php MyWidget::end(); ?>
+
+
 
 <?php// foreach($cats as $cat) {
 //     echo $cat->title. '<br>';
@@ -24,17 +35,17 @@
 
 <?php //ЖАДНАЯ ЗАГРУЗКА?>
 <?php 
-foreach($cats as $cat){
-    echo '<ul>';
-        echo '<li>' . $cat->title . '</li>';
-        $products = $cat->products;
-        foreach($products as $product){
-            echo '<ul>';
-                echo '<li>' . $product->title . '</li>';
-            echo '</ul>';
-        }
-    echo '</ul>';
-}
+// foreach($cats as $cat){
+//     echo '<ul>';
+//         echo '<li>' . $cat->title . '</li>';
+//         $products = $cat->products;
+//         foreach($products as $product){
+//             echo '<ul>';
+//                 echo '<li>' . $product->title . '</li>';
+//             echo '</ul>';
+//         }
+//     echo '</ul>';
+// }
 ?>
 
 
