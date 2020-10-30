@@ -16,8 +16,29 @@
 ?>
 
 
+<?php //ЛЕНИВАЯ ЗАГРУЗКА ?>
+<?php //debug($cats); ?>
+<?php //echo count($cats->products); // обращение к связанной модели во время ленивой загрузки?>
+<?php //debug($cats); ?>
 
-<?php debug($cats); ?>
+
+<?php //ЖАДНАЯ ЗАГРУЗКА?>
+<?php 
+foreach($cats as $cat){
+    echo '<ul>';
+        echo '<li>' . $cat->title . '</li>';
+        $products = $cat->products;
+        foreach($products as $product){
+            echo '<ul>';
+                echo '<li>' . $product->title . '</li>';
+            echo '</ul>';
+        }
+    echo '</ul>';
+}
+?>
+
+
+
 
 <button class="btn btn-success" id="btn">Click me...</button>
 

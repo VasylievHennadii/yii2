@@ -64,8 +64,20 @@ class PostController extends AppController {
         // $query = "SELECT * FROM categories WHERE title LIKE '%pp%'";
         // $cats = Category::findBySql($query)->all();
 
-        $query = "SELECT * FROM categories WHERE title LIKE :search";
-        $cats = Category::findBySql($query, [':search' => '%pp%'])->all();
+        // $query = "SELECT * FROM categories WHERE title LIKE :search";
+        // $cats = Category::findBySql($query, [':search' => '%pp%'])->all();
+
+
+        //методы hasMany и hasOne
+        
+        // $cats = Category::findOne(694);   //ЛЕНИВАЯ ЗАГРУЗКА
+        // $cats = Category::find()->all();     //ЛЕНИВАЯ ЗАГРУЗКА
+        $cats = Category::find()->with('products')->all();   //ЖАДНАЯ ЗАГРУЗКА
+
+
+
+
+
 
         return $this->render('show', compact('cats'));
     }

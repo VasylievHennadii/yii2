@@ -13,6 +13,12 @@ class Category extends ActiveRecord{
         return 'categories';
     }
 
+    /**
+     * метод связывает таблицы categories и products по принципу один ко многим (hasMany)
+     */
+    public function getProducts(){
+        return $this->hasMany(Product::className(), ['parent' => 'id']);
+    }
 }
 
 
