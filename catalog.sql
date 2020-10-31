@@ -1,20 +1,22 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.6
--- http://www.phpmyadmin.net
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 03 2016 г., 11:42
--- Версия сервера: 5.5.41-log
--- Версия PHP: 5.4.35
+-- Время создания: Окт 30 2020 г., 23:37
+-- Версия сервера: 10.3.13-MariaDB-log
+-- Версия PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `catalog`
@@ -26,14 +28,12 @@ SET time_zone = "+00:00";
 -- Структура таблицы `categories`
 --
 
-CREATE TABLE IF NOT EXISTS `categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `categories` (
+  `id` int(10) UNSIGNED NOT NULL,
   `title` varchar(255) NOT NULL,
-  `parent` int(10) unsigned NOT NULL,
-  `alias` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `alias` (`alias`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=896 ;
+  `parent` int(10) UNSIGNED NOT NULL,
+  `alias` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `categories`
@@ -83,17 +83,16 @@ INSERT INTO `categories` (`id`, `title`, `parent`, `alias`) VALUES
 -- Структура таблицы `comments`
 --
 
-CREATE TABLE IF NOT EXISTS `comments` (
-  `comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `comments` (
+  `comment_id` int(10) UNSIGNED NOT NULL,
   `comment_author` varchar(255) NOT NULL,
   `comment_text` text NOT NULL,
-  `parent` int(10) unsigned NOT NULL DEFAULT '0',
-  `comment_product` int(10) unsigned NOT NULL,
+  `parent` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `comment_product` int(10) UNSIGNED NOT NULL,
   `approved` enum('0','1') NOT NULL DEFAULT '0',
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `is_admin` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`comment_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=76 ;
+  `created` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_admin` tinyint(4) NOT NULL DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `comments`
@@ -152,13 +151,12 @@ INSERT INTO `comments` (`comment_id`, `comment_author`, `comment_text`, `parent`
 -- Структура таблицы `forgot`
 --
 
-CREATE TABLE IF NOT EXISTS `forgot` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `forgot` (
+  `id` int(10) UNSIGNED NOT NULL,
   `hash` varchar(32) NOT NULL,
-  `expire` int(10) unsigned NOT NULL,
-  `email` varchar(32) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+  `expire` int(10) UNSIGNED NOT NULL,
+  `email` varchar(32) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -166,13 +164,12 @@ CREATE TABLE IF NOT EXISTS `forgot` (
 -- Структура таблицы `options`
 --
 
-CREATE TABLE IF NOT EXISTS `options` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `options` (
+  `id` int(10) UNSIGNED NOT NULL,
   `title` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `value` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `options`
@@ -190,17 +187,15 @@ INSERT INTO `options` (`id`, `title`, `name`, `value`) VALUES
 -- Структура таблицы `pages`
 --
 
-CREATE TABLE IF NOT EXISTS `pages` (
-  `page_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `pages` (
+  `page_id` tinyint(3) UNSIGNED NOT NULL,
   `title` varchar(255) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `keywords` varchar(255) NOT NULL,
   `text` text NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`page_id`),
-  UNIQUE KEY `alias` (`alias`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `position` tinyint(3) UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `pages`
@@ -214,21 +209,41 @@ INSERT INTO `pages` (`page_id`, `title`, `alias`, `description`, `keywords`, `te
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `posts`
+--
+
+CREATE TABLE `posts` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `text` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `posts`
+--
+
+INSERT INTO `posts` (`id`, `name`, `email`, `text`) VALUES
+(1, 'Автор', 'mail@mail.com', 'Текст моего сообщения'),
+(2, 'Имя', '222@2.com', 'Текст сообщения'),
+(3, 'Andrey', '1@1.com', '1321321321'),
+(4, 'Andrey', 'mail@mail.com', '321323213');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `products`
 --
 
-CREATE TABLE IF NOT EXISTS `products` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `products` (
+  `id` int(10) UNSIGNED NOT NULL,
   `title` varchar(255) NOT NULL,
   `alias` varchar(255) NOT NULL,
-  `parent` int(10) unsigned NOT NULL,
+  `parent` int(10) UNSIGNED NOT NULL,
   `content` text NOT NULL,
   `image` varchar(255) NOT NULL DEFAULT 'empty_thumb.jpg',
-  `price` float NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `alias` (`alias`),
-  KEY `parent` (`parent`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13612 ;
+  `price` float NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `products`
@@ -266,9 +281,9 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (13094, 'Аккумулятор iPod Touch 4G', 'akkumulyator-ipod-touch-4g', 693, '', 'product.jpg', 13.4),
 (13220, 'Hands-free connector iPod Touch 4G', 'hands-free-connector-ipod-touch-4g', 693, '', 'product.jpg', 6.5),
 (13295, 'LCD iPod Nano 7G', 'lcd-ipod-nano-7g', 693, '', 'product.jpg', 20),
-(10621, 'Glass Screen Cover for MacBook Pro 13.3"', 'glass-screen-cover-for-macbook-pro-13-3', 694, 'защитное стекло экрана', 'product.jpg', 59),
-(10622, 'Glass Screen Cover for MacBook Pro 15.4"', 'glass-screen-cover-for-macbook-pro-15-4', 694, 'защитное стекло экрана ', 'product.jpg', 69),
-(10623, 'Glass Screen Cover for MacBook Pro 17.1"', 'glass-screen-cover-for-macbook-pro-17-1', 694, 'защитное стекло экрана', 'product.jpg', 77),
+(10621, 'Glass Screen Cover for MacBook Pro 13.3\"', 'glass-screen-cover-for-macbook-pro-13-3', 694, 'защитное стекло экрана', 'product.jpg', 59),
+(10622, 'Glass Screen Cover for MacBook Pro 15.4\"', 'glass-screen-cover-for-macbook-pro-15-4', 694, 'защитное стекло экрана ', 'product.jpg', 69),
+(10623, 'Glass Screen Cover for MacBook Pro 17.1\"', 'glass-screen-cover-for-macbook-pro-17-1', 694, 'защитное стекло экрана', 'product.jpg', 77),
 (9639, 'Клипсы для дисплея iPad ', 'klipsy-dlya-displeya-ipad', 695, '', 'product.jpg', 0.3),
 (9780, 'Housing iPad 3G (silver)', 'housing-ipad-3g-silver', 695, 'Корпус на iPad 3G серебристый', 'product.jpg', 55),
 (10162, 'Аккумулятор iPad ', 'akkumulyator-ipad', 695, '', 'product.jpg', 30),
@@ -561,8 +576,7 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (9785, 'Screen Guard iPhone 4/4S Clear BULLKin  ', 'screen-guard-iphone-4-4s-clear-bullkin', 841, '', 'product.jpg', 2.9),
 (9786, 'Mallper Screen Protective Film iPhone 4G ', 'mallper-screen-protective-film-iphone-4g', 841, 'Compatible with capacitive touch screen', 'product.jpg', 6),
 (10100, 'Screen Guard iPhone 4/4S Front/Back', 'screen-guard-iphone-4-4s-front-back', 841, '', 'product.jpg', 2.8),
-(10101, 'Screen Guard iPhone 4/4S Front/Back Mirror ', 'screen-guard-iphone-4-4s-front-back-mirror', 841, '(зеркальная)', 'product.jpg', 2);
-INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `price`) VALUES
+(10101, 'Screen Guard iPhone 4/4S Front/Back Mirror ', 'screen-guard-iphone-4-4s-front-back-mirror', 841, '(зеркальная)', 'product.jpg', 2),
 (10102, 'Screen Guard iPhone 4/4S Front/Back Anti Glare ', 'screen-guard-iphone-4-4s-front-back-anti-glare', 841, '(матовая)', 'product.jpg', 2.8),
 (10336, 'Screen Guard iPhone 4/4S Mirror', 'screen-guard-iphone-4-4s-mirror', 841, '<p>\r\n	(зеркальная)</p>\r\n', 'product.jpg', 1.6),
 (10855, 'Screen Guard iPhone 4/4S Front/Back Diamond', 'screen-guard-iphone-4-4s-front-back-diamond', 841, '', 'product.jpg', 6.5),
@@ -599,15 +613,16 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (9540, 'Screen Guard iPod Nano 5G', 'screen-guard-ipod-nano-5g', 842, '', 'product.jpg', 0.9),
 (13338, 'Screen Guard iPod Touch 5G Anti Glare', 'screen-guard-ipod-touch-5g-anti-glare', 842, '<p>\r\n	(матовая)</p>\r\n', 'product.jpg', 3),
 (13339, 'Screen Guard iPod Touch 5G ', 'screen-guard-ipod-touch-5g', 842, '', 'product.jpg', 2.9),
-(7027, 'Screen Guard MacBook Air 13.3"', 'screen-guard-macbook-air-13-3', 843, '', 'product.jpg', 4.9),
-(9955, 'Screen Guard MacBook Air 11.6"', 'screen-guard-macbook-air-11-6', 843, '', 'product.jpg', 4),
-(10376, 'Skin for Apple MacBook Air 11" carbon (white, black)', 'skin-for-apple-macbook-air-11-carbon-white-black', 843, '', 'product.jpg', 7),
-(10619, 'X-doria Keyboard Protector for MacBook Air/Pro 13.3"', 'x-doria-keyboard-protector-for-macbook-air-pro-13-3', 843, 'защитная плёнка на клавиатуру', 'product.jpg', 19),
-(10620, 'X-doria Keyboard Protector for MacBook Air 11.6"', 'x-doria-keyboard-protector-for-macbook-air-11-6', 843, 'защитная плёнка на клавиатуру', 'product.jpg', 19),
-(10626, 'X-doria Screen Protector for MacBook 13.3"', 'x-doria-screen-protector-for-macbook-13-3', 843, 'защитная плёнка на экран ', 'product.jpg', 19),
-(10627, 'X-doria Screen Protector for MacBook 11,6"', 'x-doria-screen-protector-for-macbook-11-6', 843, 'защитная плёнка на экран', 'product.jpg', 19),
-(10862, 'Keypad protector TPU for Air 11,6"', 'keypad-protector-tpu-for-air-11-6', 836, '', 'product.jpg', 8),
-(10863, 'Keypad protector TPU for Air 13,3"', 'keypad-protector-tpu-for-air-13-3', 843, '', 'product.jpg', 8),
+(7027, 'Screen Guard MacBook Air 13.3\"', 'screen-guard-macbook-air-13-3', 843, '', 'product.jpg', 4.9),
+(9955, 'Screen Guard MacBook Air 11.6\"', 'screen-guard-macbook-air-11-6', 843, '', 'product.jpg', 4),
+(10376, 'Skin for Apple MacBook Air 11\" carbon (white, black)', 'skin-for-apple-macbook-air-11-carbon-white-black', 843, '', 'product.jpg', 7);
+INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `price`) VALUES
+(10619, 'X-doria Keyboard Protector for MacBook Air/Pro 13.3\"', 'x-doria-keyboard-protector-for-macbook-air-pro-13-3', 843, 'защитная плёнка на клавиатуру', 'product.jpg', 19),
+(10620, 'X-doria Keyboard Protector for MacBook Air 11.6\"', 'x-doria-keyboard-protector-for-macbook-air-11-6', 843, 'защитная плёнка на клавиатуру', 'product.jpg', 19),
+(10626, 'X-doria Screen Protector for MacBook 13.3\"', 'x-doria-screen-protector-for-macbook-13-3', 843, 'защитная плёнка на экран ', 'product.jpg', 19),
+(10627, 'X-doria Screen Protector for MacBook 11,6\"', 'x-doria-screen-protector-for-macbook-11-6', 843, 'защитная плёнка на экран', 'product.jpg', 19),
+(10862, 'Keypad protector TPU for Air 11,6\"', 'keypad-protector-tpu-for-air-11-6', 836, '', 'product.jpg', 8),
+(10863, 'Keypad protector TPU for Air 13,3\"', 'keypad-protector-tpu-for-air-13-3', 843, '', 'product.jpg', 8),
 (8110, 'Набор для открывания корпусов iPhone 2G/3G/3GS', 'nabor-dlya-otkryvaniya-korpusov-iphone-2g-3g-3gs', 853, '', 'product.jpg', 5),
 (9013, 'Трафарет для iPhone 3G', 'trafaret-dlya-iphone-3g', 853, '', 'product.jpg', 6.1),
 (9015, 'Трафарет CPU iPhone', 'trafaret-cpu-iphone', 853, '', 'product.jpg', 5.95),
@@ -632,10 +647,10 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (11055, 'Capdase Soft Jacket 2 Xpose - iPod Touch (4th generation) Silicone Case (white)', 'capdase-soft-jacket-2-xpose---ipod-touch-4th-generation-silicone-case-white', 879, '', 'product.jpg', 19.5),
 (11684, 'Capdase Sport Armband for iPod shuffle 2G', 'capdase-sport-armband-for-ipod-shuffle-2g', 879, '<p>\r\n	Syncha Sync and Charge Adaptor Set</p>\r\n', 'product.jpg', 7.8),
 (12606, 'Capdase Soft Jacket 2 Xpose - iPod Touch (4th generation) Silicone Case (clear)', 'capdase-soft-jacket-2-xpose---ipod-touch-4th-generation-silicone-case-clear', 879, '', 'product.jpg', 19),
-(10504, 'Palmguard Air 13 with Trackpad Protector Silver for MacBook Air 13"', 'palmguard-air-13-with-trackpad-protector-silver-for-macbook-air-13', 880, 'Накладка на тачпад.', 'product.jpg', 17),
-(10505, 'Palmguard Pro 13 with Trackpad Protector Silver for MacBook Pro 13"', 'palmguard-pro-13-with-trackpad-protector-silver-for-macbook-pro-13', 880, 'Накладка на тачпад.', 'product.jpg', 17),
-(10506, 'Palmguard Pro 15 with Trackpad Protector Silver for MacBook Pro 15"', 'palmguard-pro-15-with-trackpad-protector-silver-for-macbook-pro-15', 880, 'Накладка на тачпад.', 'product.jpg', 17),
-(10507, 'Palmguard Air 11.6 with Trackpad Protector Silver for MacBook Air 11.6"', 'palmguard-air-11-6-with-trackpad-protector-silver-for-macbook-air-11-6', 880, 'Накладка на тачпад.', 'product.jpg', 16),
+(10504, 'Palmguard Air 13 with Trackpad Protector Silver for MacBook Air 13\"', 'palmguard-air-13-with-trackpad-protector-silver-for-macbook-air-13', 880, 'Накладка на тачпад.', 'product.jpg', 17),
+(10505, 'Palmguard Pro 13 with Trackpad Protector Silver for MacBook Pro 13\"', 'palmguard-pro-13-with-trackpad-protector-silver-for-macbook-pro-13', 880, 'Накладка на тачпад.', 'product.jpg', 17),
+(10506, 'Palmguard Pro 15 with Trackpad Protector Silver for MacBook Pro 15\"', 'palmguard-pro-15-with-trackpad-protector-silver-for-macbook-pro-15', 880, 'Накладка на тачпад.', 'product.jpg', 17),
+(10507, 'Palmguard Air 11.6 with Trackpad Protector Silver for MacBook Air 11.6\"', 'palmguard-air-11-6-with-trackpad-protector-silver-for-macbook-air-11-6', 880, 'Накладка на тачпад.', 'product.jpg', 16),
 (10617, 'Power Adapter MagSafe 85W (блок питания)', 'power-adapter-magsafe-85w-blok-pitaniya', 880, 'блок питания ', 'product.jpg', 95),
 (10618, 'Power Adapter MagSafe 60W (блок питания)', 'power-adapter-magsafe-60w-blok-pitaniya', 880, 'блок питания ', 'product.jpg', 75),
 (10624, 'Case iTaste Studio for Apple MacBook Air 11.6 (black)', 'case-itaste-studio-for-apple-macbook-air-11-6-black', 880, '<p>\r\n	Чехол - карман для MacBook Air 11.6</p>\r\n', 'product.jpg', 37),
@@ -825,7 +840,7 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (11040, 'Crystal case Tenacity iPhone 4/4S (lime)', 'crystal-case-tenacity-iphone-4-4s-lime', 886, '', 'product.jpg', 6),
 (11041, 'Crystal case iGlaze iPhone 4 (smoky)', 'crystal-case-iglaze-iphone-4-smoky', 886, '', 'product.jpg', 4),
 (11042, 'Crystal case iGlaze iPhone 4 (black)', 'crystal-case-iglaze-iphone-4-black', 886, '', 'product.jpg', 4),
-(11043, 'Crystal case "iGlaze" iPhone 4 (pink)', 'crystal-case-iglaze-iphone-4-pink', 886, '', 'product.jpg', 4),
+(11043, 'Crystal case \"iGlaze\" iPhone 4 (pink)', 'crystal-case-iglaze-iphone-4-pink', 886, '', 'product.jpg', 4),
 (11044, 'Crystal case iGlaze iPhone 4 (purple)', 'crystal-case-iglaze-iphone-4-purple', 886, '', 'product.jpg', 4),
 (11045, 'Crystal case iGlaze iPhone 4 (green)', 'crystal-case-iglaze-iphone-4-green', 886, '', 'product.jpg', 4),
 (11046, 'Crystal case iGlaze iPhone 4 (yellow)', 'crystal-case-iglaze-iphone-4-yellow', 886, '', 'product.jpg', 4),
@@ -857,8 +872,7 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (11686, 'Capdase Soft Jacket 2 Xpose iPhone 4 (black-diamond) (силиконовый)', 'capdase-soft-jacket-2-xpose-iphone-4-black-diamond-silikonovyy', 886, '<p>\r\n	чехол +мягкий чехол+подставка+защитная плёнка</p>\r\n', 'product.jpg', 9),
 (12068, 'Moshi Concerti for iPhone 4/4S (red)', 'moshi-concerti-for-iphone-4-4s-red', 886, '', 'product.jpg', 29),
 (12069, 'Moshi iGlaze Kameleon for iPhone 4/4S (black)', 'moshi-iglaze-kameleon-for-iphone-4-4s-black', 886, 'leather shell case (кожа)', 'product.jpg', 23),
-(12070, 'Moshi iGlaze Kameleon for iPhone 4/4S (white)', 'moshi-iglaze-kameleon-for-iphone-4-4s-white', 886, 'leather shell case (кожа)', 'product.jpg', 23);
-INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `price`) VALUES
+(12070, 'Moshi iGlaze Kameleon for iPhone 4/4S (white)', 'moshi-iglaze-kameleon-for-iphone-4-4s-white', 886, 'leather shell case (кожа)', 'product.jpg', 23),
 (12071, 'Moshi iGlaze snap on case for iPhone 4/4S (silver)', 'moshi-iglaze-snap-on-case-for-iphone-4-4s-silver', 886, '', 'product.jpg', 23),
 (12072, 'Moshi iGlaze snap on case for iPhone 4/4S (red)', 'moshi-iglaze-snap-on-case-for-iphone-4-4s-red', 886, '', 'product.jpg', 23),
 (12073, 'Moshi iGlaze snap on case for iPhone 4/4S (black)', 'moshi-iglaze-snap-on-case-for-iphone-4-4s-black', 886, '', 'product.jpg', 23),
@@ -917,7 +931,8 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (12954, 'HOCO Protection Case iPhone 5 (pink)', 'hoco-protection-case-iphone-5-pink', 887, 'кожаная чехол-накладка Нoco на заднюю панель', 'product.jpg', 17),
 (13047, 'Case for iPhone 5 0,3mm (clear)', 'case-for-iphone-5-0-3mm-clear', 887, 'Ультратонкий пластиковый чехол на iPhone 5 прозрачный', 'product.jpg', 9),
 (13048, 'Case for iPhone 5 0,3mm (black)', 'case-for-iphone-5-0-3mm-black', 887, 'Ультратонкий пластиковый чехол на iPhone 5 чёрный', 'product.jpg', 9),
-(13149, 'Чехол Marc Jacobs kisses для iPhone 5 (black)', 'chehol-marc-jacobs-kisses-dlya-iphone-5-black', 887, 'Case Marc by Marc Jacobs - чехол для iPhone 5 с изысканным рисунком от одного из законодателей современной моды Марка Джейкобса. Чехол подчеркнёт Вашу индивидуальность и выделит Ваш гаджет из толпы других. При этом он надежно защитит iPhone от повреждений', 'product.jpg', 10),
+(13149, 'Чехол Marc Jacobs kisses для iPhone 5 (black)', 'chehol-marc-jacobs-kisses-dlya-iphone-5-black', 887, 'Case Marc by Marc Jacobs - чехол для iPhone 5 с изысканным рисунком от одного из законодателей современной моды Марка Джейкобса. Чехол подчеркнёт Вашу индивидуальность и выделит Ваш гаджет из толпы других. При этом он надежно защитит iPhone от повреждений', 'product.jpg', 10);
+INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `price`) VALUES
 (13151, 'Чехол Marc Jacobs kisses для iPhone 5 (silver)', 'chehol-marc-jacobs-kisses-dlya-iphone-5-silver', 887, '<p>\r\n	Case Marc by Marc Jacobs - чехол для iPhone 5 с изысканным рисунком от одного из законодателей современной моды Марка Джейкобса. Чехол подчеркнёт Вашу индивидуальность и выделит Ваш гаджет из толпы других. При этом он надежно защитит iPhone от повреждений</p>\r\n', 'product.jpg', 10),
 (13153, 'Чехол Marc Jacobs резиновый с буквами для iPhone 5 (black)', 'chehol-marc-jacobs-rezinovyy-s-bukvami-dlya-iphone-5-black', 887, 'Case Marc by Marc Jacobs - чехол для iPhone 5 с изысканным рисунком от одного из законодателей современной моды Марка Джейкобса. Чехол подчеркнёт Вашу индивидуальность и выделит Ваш гаджет из толпы других. При этом он надежно защитит iPhone от повреждений', 'product.jpg', 12),
 (13155, 'Чехол Marc Jacobs резиновый с буквами для iPhone 5 (yellow)', 'chehol-marc-jacobs-rezinovyy-s-bukvami-dlya-iphone-5-yellow', 887, 'Case Marc by Marc Jacobs - чехол для iPhone 5 с изысканным рисунком от одного из законодателей современной моды Марка Джейкобса. Чехол подчеркнёт Вашу индивидуальность и выделит Ваш гаджет из толпы других. При этом он надежно защитит iPhone от повреждений', 'product.jpg', 12),
@@ -940,10 +955,10 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (13354, 'Protective Case for iPhone 5 (pink-clear)', 'protective-case-for-iphone-5-pink-clear', 887, 'Жёсткий чехол-накладка прозрачно-розовый', 'product.jpg', 10),
 (13355, 'Protective Case for iPhone 5 (black-clear)', 'protective-case-for-iphone-5-black-clear', 887, 'Жёсткий чехол-накладка прозрачно-чёрный', 'product.jpg', 10),
 (13356, 'Protective Case for iPhone 5 (white-clear)', 'protective-case-for-iphone-5-white-clear', 887, 'Жёсткий чехол-накладка прозрачно-белый', 'product.jpg', 10),
-(13428, 'Чехол дополнительный аккумулятор для iPhone 5 "Ferrari" (чёрный)', 'chehol-dopolnitel-nyy-akkumulyator-dlya-iphone-5-ferrari-chernyy', 887, 'Очень тонкий чехол BackUp с аккумулятором для iPhone 5,Ёмкость батареи: 2500 mAh,Время в режиме ожидания: до 280 часов, Время в режиме разговора: до 6 часов в 3G, до 10 часов в 2G.', 'product.jpg', 28),
+(13428, 'Чехол дополнительный аккумулятор для iPhone 5 \"Ferrari\" (чёрный)', 'chehol-dopolnitel-nyy-akkumulyator-dlya-iphone-5-ferrari-chernyy', 887, 'Очень тонкий чехол BackUp с аккумулятором для iPhone 5,Ёмкость батареи: 2500 mAh,Время в режиме ожидания: до 280 часов, Время в режиме разговора: до 6 часов в 3G, до 10 часов в 2G.', 'product.jpg', 28),
 (13429, 'Чехол дополнительный аккумулятор для iPhone 5 (серебристо-белый)', 'chehol-dopolnitel-nyy-akkumulyator-dlya-iphone-5-serebristo-belyy', 887, 'Очень тонкий чехол BackUp с аккумулятором для iPhone 5,Ёмкость батареи: 2500 mAh,Время в режиме ожидания: до 280 часов, Время в режиме разговора: до 6 часов в 3G, до 10 часов в 2G.', 'product.jpg', 26),
 (13430, 'Чехол дополнительный аккумулятор для iPhone 5 (чёрный)', 'chehol-dopolnitel-nyy-akkumulyator-dlya-iphone-5-chernyy', 887, 'Очень тонкий чехол BackUp с аккумулятором для iPhone 5,Ёмкость батареи: 2500 mAh,Время в режиме ожидания: до 280 часов, Время в режиме разговора: до 6 часов в 3G, до 10 часов в 2G.', 'product.jpg', 26),
-(13431, 'Чехол дополнительный аккумулятор для iPhone 5 "Ferrari" (серебристо-белый)', 'chehol-dopolnitel-nyy-akkumulyator-dlya-iphone-5-ferrari-serebristo-belyy', 887, 'Очень тонкий чехол BackUp с аккумулятором для iPhone 5,Ёмкость батареи: 2500 mAh,Время в режиме ожидания: до 280 часов, Время в режиме разговора: до 6 часов в 3G, до 10 часов в 2G.', 'product.jpg', 28),
+(13431, 'Чехол дополнительный аккумулятор для iPhone 5 \"Ferrari\" (серебристо-белый)', 'chehol-dopolnitel-nyy-akkumulyator-dlya-iphone-5-ferrari-serebristo-belyy', 887, 'Очень тонкий чехол BackUp с аккумулятором для iPhone 5,Ёмкость батареи: 2500 mAh,Время в режиме ожидания: до 280 часов, Время в режиме разговора: до 6 часов в 3G, до 10 часов в 2G.', 'product.jpg', 28),
 (13491, 'Mophie Juice Pack Air iPhone 5 (чёрный)', 'mophie-juice-pack-air-iphone-5-chernyy', 887, '<p>\r\n	Чехол с дополнительным аккумулятором для iPhone 5 -это надежная защита и долгая работа вашего смартфона, есть индикатор заряда батареи, Материал: Поликарбонат</p>\r\n', 'product.jpg', 34),
 (13492, 'Mophie Juice Pack Air iPhone 5 (белый)', 'mophie-juice-pack-air-iphone-5-belyy', 887, '<p>\r\n	Чехол с дополнительным аккумулятором для iPhone 5 -это надежная защита и долгая работа вашего смартфона, есть индикатор заряда батареи, Материал: Поликарбонат</p>\r\n', 'product.jpg', 34),
 (13566, 'Чехол Swarovski для iPhone 5 (сыпучие камушки)', 'chehol-swarovski-dlya-iphone-5-sypuchie-kamushki', 887, '', 'product.jpg', 15),
@@ -1018,31 +1033,31 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 (13405, 'Griffin PowerJolt Dual Micro Car Charger for iPhone 5/iPad 4/iPad mini', 'griffin-powerjolt-dual-micro-car-charger-for-iphone-5-ipad-4-ipad-mini', 888, '', 'product.jpg', 25),
 (13489, 'Портативное зарядное устройство Lepow-stone  (золотистое) 2 USB + кабель', 'portativnoe-zaryadnoe-ustroystvo-lepow-stone-zolotistoe-2-usb-kabel', 888, '', 'product.jpg', 40),
 (13490, 'Портативное зарядное устройство Lepow-stone  (тёмно-розовый) 2 USB + кабель', 'portativnoe-zaryadnoe-ustroystvo-lepow-stone-temno-rozovyy-2-usb-kabel', 888, '', 'product.jpg', 40),
-(13453, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black) "Aventador D1"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-aventador-d1', 895, 'Чехол флип-кейс Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи; Чехол очень тонкий и легкий, все порты и разъёмы остаются открытыми. Чехол не увеличит вес и объем вашего смартфона. ', 'product.jpg', 35),
+(13453, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black) \"Aventador D1\"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-aventador-d1', 895, 'Чехол флип-кейс Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи; Чехол очень тонкий и легкий, все порты и разъёмы остаются открытыми. Чехол не увеличит вес и объем вашего смартфона. ', 'product.jpg', 35),
 (13454, 'Чехол на iPhone 5 Lamborghini Genuine Leather Slim Wallet Cover (black)', 'chehol-na-iphone-5-lamborghini-genuine-leather-slim-wallet-cover-black', 895, 'Стильный кожаный чехол-крышка с логотипом Lamborghini и отделением для пластиковых карт', 'product.jpg', 32),
-(13455, 'Чехол на iPhone 5 Lamborghini Policarbonate and TPV 2in1 Back Cover (grey) "Super leggera stylish D1"', 'chehol-na-iphone-5-lamborghini-policarbonate-and-tpv-2in1-back-cover-grey-super-leggera-stylish-d1', 895, 'Стильный пластиковый чехол-крышка с логотипом Lamborghini и флагом Италии. Цвет Серый .Идеально прилегает к устройству.Отверстия для камеры и вспышки.Свободный доступ к сенсорному экрану, элементам управления и необходимым разъемам.', 'product.jpg', 23),
-(13456, 'Чехол на iPhone 5 Lamborghini Policarbonate and TPV 2in1 Back Cover (white) "Super leggera stylish D1"', 'chehol-na-iphone-5-lamborghini-policarbonate-and-tpv-2in1-back-cover-white-super-leggera-stylish-d1', 895, 'Стильный пластиковый чехол-крышка с логотипом Lamborghini и флагом Италии. Цвет белый .Идеально прилегает к устройству.Отверстия для камеры и вспышки.Свободный доступ к сенсорному экрану, элементам управления и необходимым разъемам.', 'product.jpg', 23),
-(13457, 'Чехол на iPhone 5 Lamborghini Policarbonate and TPV 2in1 Back Cover (orange) "Super leggera stylish D1"', 'chehol-na-iphone-5-lamborghini-policarbonate-and-tpv-2in1-back-cover-orange-super-leggera-stylish-d1', 895, 'Стильный пластиковый чехол-крышка с логотипом Lamborghini и флагом Италии. Цвет Оранжевый .Идеально прилегает к устройству.Отверстия для камеры и вспышки.Свободный доступ к сенсорному экрану, элементам управления и необходимым разъемам.', 'product.jpg', 23),
-(13458, 'Чехол на iPhone 5 Lamborghini Policarbonate Back Cover (black) "Murcielago stylish D1"', 'chehol-na-iphone-5-lamborghini-policarbonate-back-cover-black-murcielago-stylish-d1', 895, '', 'product.jpg', 25),
-(13459, 'Чехол на iPhone 5 Lamborghini Policarbonate Back Cover (white) "Murcielago stylish D1"', 'chehol-na-iphone-5-lamborghini-policarbonate-back-cover-white-murcielago-stylish-d1', 895, '', 'product.jpg', 25),
-(13460, 'Чехол на iPhone 5 Lamborghini Policarbonate Back Cover (black) "Gallardo Stylish D1"', 'chehol-na-iphone-5-lamborghini-policarbonate-back-cover-black-gallardo-stylish-d1', 895, '', 'product.jpg', 25),
-(13461, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black-green) "Gallardo D2"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-green-gallardo-d2', 895, 'Чехол флип-кейс Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи; Чехол очень тонкий и легкий, все порты и разъёмы остаются открытыми. Чехол не увеличит вес и объем вашего смартфона. ', 'product.jpg', 35),
-(13463, 'Чехол на iPhone 5 Lamborghini Genuine Leather Flip Case & Carbon Fiber (black)  "Avendator-D2"', 'chehol-na-iphone-5-lamborghini-genuine-leather-flip-case-carbon-fiber-black-avendator-d2', 895, 'Чёрный чехол-флип выполнен из натуральной высококачественной кожи с карбоновой вставкой серии Avendator-D2 для iPhone 5', 'product.jpg', 35),
-(13464, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover (black) "Aventador"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-black-aventador', 895, '', 'product.jpg', 30),
-(13465, 'Чехол на iPhone 5 Lamborghini Leather Back Cover (black) "Performante D1"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-black-performante-d1', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 27),
-(13466, 'Чехол на iPhone 5 Lamborghini Leather Back Cover (white) "Performante D1"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-white-performante-d1', 895, 'Кожаный чехол накладка белого цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 27),
-(13467, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black) "Performante-D1"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-performante-d1', 895, 'Чехол флип-кейс Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи; Чехол очень тонкий и легкий, все порты и разъёмы остаются открытыми. Чехол не увеличит вес и объем вашего смартфона. ', 'product.jpg', 35),
+(13455, 'Чехол на iPhone 5 Lamborghini Policarbonate and TPV 2in1 Back Cover (grey) \"Super leggera stylish D1\"', 'chehol-na-iphone-5-lamborghini-policarbonate-and-tpv-2in1-back-cover-grey-super-leggera-stylish-d1', 895, 'Стильный пластиковый чехол-крышка с логотипом Lamborghini и флагом Италии. Цвет Серый .Идеально прилегает к устройству.Отверстия для камеры и вспышки.Свободный доступ к сенсорному экрану, элементам управления и необходимым разъемам.', 'product.jpg', 23),
+(13456, 'Чехол на iPhone 5 Lamborghini Policarbonate and TPV 2in1 Back Cover (white) \"Super leggera stylish D1\"', 'chehol-na-iphone-5-lamborghini-policarbonate-and-tpv-2in1-back-cover-white-super-leggera-stylish-d1', 895, 'Стильный пластиковый чехол-крышка с логотипом Lamborghini и флагом Италии. Цвет белый .Идеально прилегает к устройству.Отверстия для камеры и вспышки.Свободный доступ к сенсорному экрану, элементам управления и необходимым разъемам.', 'product.jpg', 23),
+(13457, 'Чехол на iPhone 5 Lamborghini Policarbonate and TPV 2in1 Back Cover (orange) \"Super leggera stylish D1\"', 'chehol-na-iphone-5-lamborghini-policarbonate-and-tpv-2in1-back-cover-orange-super-leggera-stylish-d1', 895, 'Стильный пластиковый чехол-крышка с логотипом Lamborghini и флагом Италии. Цвет Оранжевый .Идеально прилегает к устройству.Отверстия для камеры и вспышки.Свободный доступ к сенсорному экрану, элементам управления и необходимым разъемам.', 'product.jpg', 23),
+(13458, 'Чехол на iPhone 5 Lamborghini Policarbonate Back Cover (black) \"Murcielago stylish D1\"', 'chehol-na-iphone-5-lamborghini-policarbonate-back-cover-black-murcielago-stylish-d1', 895, '', 'product.jpg', 25),
+(13459, 'Чехол на iPhone 5 Lamborghini Policarbonate Back Cover (white) \"Murcielago stylish D1\"', 'chehol-na-iphone-5-lamborghini-policarbonate-back-cover-white-murcielago-stylish-d1', 895, '', 'product.jpg', 25),
+(13460, 'Чехол на iPhone 5 Lamborghini Policarbonate Back Cover (black) \"Gallardo Stylish D1\"', 'chehol-na-iphone-5-lamborghini-policarbonate-back-cover-black-gallardo-stylish-d1', 895, '', 'product.jpg', 25),
+(13461, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black-green) \"Gallardo D2\"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-green-gallardo-d2', 895, 'Чехол флип-кейс Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи; Чехол очень тонкий и легкий, все порты и разъёмы остаются открытыми. Чехол не увеличит вес и объем вашего смартфона. ', 'product.jpg', 35),
+(13463, 'Чехол на iPhone 5 Lamborghini Genuine Leather Flip Case & Carbon Fiber (black)  \"Avendator-D2\"', 'chehol-na-iphone-5-lamborghini-genuine-leather-flip-case-carbon-fiber-black-avendator-d2', 895, 'Чёрный чехол-флип выполнен из натуральной высококачественной кожи с карбоновой вставкой серии Avendator-D2 для iPhone 5', 'product.jpg', 35),
+(13464, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover (black) \"Aventador\"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-black-aventador', 895, '', 'product.jpg', 30),
+(13465, 'Чехол на iPhone 5 Lamborghini Leather Back Cover (black) \"Performante D1\"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-black-performante-d1', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 27),
+(13466, 'Чехол на iPhone 5 Lamborghini Leather Back Cover (white) \"Performante D1\"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-white-performante-d1', 895, 'Кожаный чехол накладка белого цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 27),
+(13467, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black) \"Performante-D1\"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-performante-d1', 895, 'Чехол флип-кейс Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи; Чехол очень тонкий и легкий, все порты и разъёмы остаются открытыми. Чехол не увеличит вес и объем вашего смартфона. ', 'product.jpg', 35),
 (13468, 'Чехол на iPhone 5 Lamborghini Ultra-Slim Leather Flip Case (black)', 'chehol-na-iphone-5-lamborghini-ultra-slim-leather-flip-case-black', 895, 'Чёрный ультра-тонкий чехол книжка для iPhone 5 из натуральной высококачественной кожи', 'product.jpg', 35),
 (13469, 'Чехол на iPhone 5 Lamborghini Ultra-Slim Leather Flip Case (white)', 'chehol-na-iphone-5-lamborghini-ultra-slim-leather-flip-case-white', 895, 'Белый ультра-тонкий чехол книжка для iPhone 5 из натуральной высококачественной кожи', 'product.jpg', 35),
-(13470, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black) "Gallardo D1"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-gallardo-d1', 895, 'Чёрный чехол флип-кейс на магните Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи', 'product.jpg', 35),
-(13471, 'Чехол на iPhone 5 Lamborghini Leather Back Cover + Vertical Wallet Cover iPhone "Gallardo D1"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-vertical-wallet-cover-iphone-gallardo-d1', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini с отделом для пластиковых карт', 'product.jpg', 32),
-(13472, 'Чехол на iPhone 5 Lamborghini Leather Back Cover + Vertical Wallet Cover (white) "Gallardo D1"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-vertical-wallet-cover-white-gallardo-d1', 895, 'Кожаный чехол накладка белого цвета Lamborghini с отделом для пластиковых карт', 'product.jpg', 32),
-(13473, 'Чехол на iPhone 5 Lamborghini Leather Back Cover + Vertical Wallet Cover (purple) "Gallardo D1"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-vertical-wallet-cover-purple-gallardo-d1', 895, 'Кожаный чехол накладка фиолетового цвета Lamborghini с отделом для пластиковых карт', 'product.jpg', 32),
-(13474, 'Чехол на iPhone 5 Lamborghini Leather Back Cover (black) "Genuine"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-black-genuine', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 30),
-(13475, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover (black) "Gallardo D1"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-black-gallardo-d1', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 30),
-(13476, 'Чехол на iPhone 5 Lamborghini Leather Sleeve Case (black) "Gallardo D1"', 'chehol-na-iphone-5-lamborghini-leather-sleeve-case-black-gallardo-d1', 895, 'Кожаный чехол карман чёрного цвета Lamborghini ', 'product.jpg', 34),
-(13477, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover & Carbon Fiber (black) "Aventador"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-carbon-fiber-black-aventador', 895, '', 'product.jpg', 31),
-(13478, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover & Carbon Fiber (white) "Aventador"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-carbon-fiber-white-aventador', 895, '', 'product.jpg', 31);
+(13470, 'Чехол на iPhone 5 Lamborghini Leather Flip Case (black) \"Gallardo D1\"', 'chehol-na-iphone-5-lamborghini-leather-flip-case-black-gallardo-d1', 895, 'Чёрный чехол флип-кейс на магните Lamborghini выполнен итальянскими мастерами по лицензии Lamborghini из натуральной высококачественной кожи', 'product.jpg', 35),
+(13471, 'Чехол на iPhone 5 Lamborghini Leather Back Cover + Vertical Wallet Cover iPhone \"Gallardo D1\"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-vertical-wallet-cover-iphone-gallardo-d1', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini с отделом для пластиковых карт', 'product.jpg', 32),
+(13472, 'Чехол на iPhone 5 Lamborghini Leather Back Cover + Vertical Wallet Cover (white) \"Gallardo D1\"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-vertical-wallet-cover-white-gallardo-d1', 895, 'Кожаный чехол накладка белого цвета Lamborghini с отделом для пластиковых карт', 'product.jpg', 32),
+(13473, 'Чехол на iPhone 5 Lamborghini Leather Back Cover + Vertical Wallet Cover (purple) \"Gallardo D1\"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-vertical-wallet-cover-purple-gallardo-d1', 895, 'Кожаный чехол накладка фиолетового цвета Lamborghini с отделом для пластиковых карт', 'product.jpg', 32),
+(13474, 'Чехол на iPhone 5 Lamborghini Leather Back Cover (black) \"Genuine\"', 'chehol-na-iphone-5-lamborghini-leather-back-cover-black-genuine', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 30),
+(13475, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover (black) \"Gallardo D1\"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-black-gallardo-d1', 895, 'Кожаный чехол накладка чёрного цвета Lamborghini – это символ успешности и богатства. Это по-настоящему статусный, роскошный аксессуар, который защитит и украсит Ваш смартфон.', 'product.jpg', 30),
+(13476, 'Чехол на iPhone 5 Lamborghini Leather Sleeve Case (black) \"Gallardo D1\"', 'chehol-na-iphone-5-lamborghini-leather-sleeve-case-black-gallardo-d1', 895, 'Кожаный чехол карман чёрного цвета Lamborghini ', 'product.jpg', 34),
+(13477, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover & Carbon Fiber (black) \"Aventador\"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-carbon-fiber-black-aventador', 895, '', 'product.jpg', 31),
+(13478, 'Чехол на iPhone 5 Lamborghini Genuine Leather Back Cover & Carbon Fiber (white) \"Aventador\"', 'chehol-na-iphone-5-lamborghini-genuine-leather-back-cover-carbon-fiber-white-aventador', 895, '', 'product.jpg', 31);
 
 -- --------------------------------------------------------
 
@@ -1050,19 +1065,15 @@ INSERT INTO `products` (`id`, `title`, `alias`, `parent`, `content`, `image`, `p
 -- Структура таблицы `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` int(10) UNSIGNED NOT NULL,
   `login` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `password` varchar(32) NOT NULL,
   `email` varchar(32) NOT NULL,
   `name` varchar(32) NOT NULL,
-  `is_admin` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `remember` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `login` (`login`),
-  UNIQUE KEY `email` (`email`),
-  KEY `remember` (`remember`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+  `is_admin` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  `remember` varchar(32) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `users`
@@ -1072,11 +1083,123 @@ INSERT INTO `users` (`id`, `login`, `password`, `email`, `name`, `is_admin`, `re
 (1, 'admin', '202cb962ac59075b964b07152d234b70', 'admin@catalog.loc', 'Менеджер', 1, 'b7de6c3baeb48c50a1245d24d26a442c'),
 (2, 'andrey', '202cb962ac59075b964b07152d234b70', 'andrey@mail.ru', 'Андрей', 0, NULL),
 (11, 'user', '202cb962ac59075b964b07152d234b70', 'user@user.com', 'Пользователь', 0, ''),
-(13, 'o''railly', '202cb962ac59075b964b07152d234b70', '1', 'O''Railly', 0, NULL),
+(13, 'o\'railly', '202cb962ac59075b964b07152d234b70', '1', 'O\'Railly', 0, NULL),
 (14, '444', '698d51a19d8a121ce581499d7b701668', '111', '1', 0, NULL),
 (15, 'vel', '202cb962ac59075b964b07152d234b70', 'vel@vel.com', 'Валерия', 0, NULL),
 (16, 'user2', '202cb962ac59075b964b07152d234b70', 'user2@mail.ru', 'user2', 0, NULL),
 (17, 'user3', '202cb962ac59075b964b07152d234b70', 'user3@mail.ru', 'user3', 0, NULL);
+
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `alias` (`alias`);
+
+--
+-- Индексы таблицы `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`comment_id`);
+
+--
+-- Индексы таблицы `forgot`
+--
+ALTER TABLE `forgot`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `options`
+--
+ALTER TABLE `options`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `pages`
+--
+ALTER TABLE `pages`
+  ADD PRIMARY KEY (`page_id`),
+  ADD UNIQUE KEY `alias` (`alias`);
+
+--
+-- Индексы таблицы `posts`
+--
+ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `alias` (`alias`),
+  ADD KEY `parent` (`parent`);
+
+--
+-- Индексы таблицы `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `login` (`login`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `remember` (`remember`);
+
+--
+-- AUTO_INCREMENT для сохранённых таблиц
+--
+
+--
+-- AUTO_INCREMENT для таблицы `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=896;
+
+--
+-- AUTO_INCREMENT для таблицы `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `comment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+
+--
+-- AUTO_INCREMENT для таблицы `forgot`
+--
+ALTER TABLE `forgot`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT для таблицы `options`
+--
+ALTER TABLE `options`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `pages`
+--
+ALTER TABLE `pages`
+  MODIFY `page_id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT для таблицы `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT для таблицы `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13612;
+
+--
+-- AUTO_INCREMENT для таблицы `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

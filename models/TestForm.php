@@ -27,7 +27,7 @@ class TestForm extends ActiveRecord {
 
     public function rules() {
         return [
-            [['name', 'text'], 'required'],            
+            [['name', 'text', 'email'], 'required'],            
             ['email', 'email'],
             ['text', 'trim'],
             // [['name', 'email'], 'required', 'message' => 'Поле обязательно'],
